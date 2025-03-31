@@ -61,8 +61,17 @@ int main(int argc,char *argv[]) {
         std::cerr << "Usage: " << argv[0] << " <GPU_ID>" << std::endl;
         return 1;
     }
+    cudaError_t err;
 
     int gpu_id = std::stoi(argv[1]);
-    load_gpu(50.0, 75.0,gpu_id);  // Load 50% cores, 75% memory for 60 seconds
-    return 0;
+       err = cudaSetDevice(gpu_id);
+    if (err != cudaSuccess) {
+        printf("Failed to set GPU ID %d: %s\n", gpu_id, cudaGetErrorString(err));
+        return 1;
+    }
+    else
+    {
+        load_gpu(50.0, 75.0,gpu_id);  // Load 50% cores, 75% memory for 60 seconds
+        return 0;
+    }
 }
